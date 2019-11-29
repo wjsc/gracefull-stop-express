@@ -1,21 +1,33 @@
+## Start parallel requests
+```
 ab -n 1000 -c 30 http://localhost:3000/resource
-watch -n1 curl -XGET localhost:3000/health -i
+```
 
-SIGTERM
+## Ping healthcheck
+```
+watch -n1 curl -XGET localhost:3000/health -i
+```
+
+## Send SIGTERM signal
+```
 kill -15 $(ps | grep node | awk '{print $1}' | head -n1)
 ps | grep node | awk '{print $1}' | head -n1 | xargs kill -15
+```
 
-SIGKILL
+## Send SIGKILL signal
+```
 kill -9 $(ps | grep node | awk '{print $1}' | head -n1)
 ps | grep node | awk '{print $1}' | head -n1 | xargs kill -9
+```
 
 
-
-
-KILL PROCESS BY PORT MACOS
+## MacOS quit process by port
+```
 lsof -i tcp:3000 | awk '{print $2}' | tail -n1 | xargs kill -9
+```
 
-
+## Signals
+```
 SIGHUP	1	Hangup (POSIX)
 SIGINT	2	Terminal interrupt (ANSI)
 SIGQUIT	3	Terminal quit (POSIX)
@@ -46,6 +58,11 @@ SIGPROF	27	Profiling alarm clock (4.2 BSD)
 SIGWINCH	28	Window size change (4.3 BSD, Sun)
 SIGIO	29	I/O now possible (4.2 BSD)
 SIGPWR	30	Power failure restart (System V)
+```
 
-
+## Build docker image
+```
 docker build -t gracefull-stop-express:1.0.0 .
+```
+
+NOTE: Starting the processs with a npm script is not supported, the signal gets lost before arriving the nodejs process
